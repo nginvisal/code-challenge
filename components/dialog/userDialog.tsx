@@ -65,7 +65,7 @@ export default function CustomizedDialogs(props: CustomDialogProps) {
 			nama: '' ,
 			type: '',
 			status: '',
-			signDefault: '',
+			signDefault: false,
 		},
 		validationSchema: validationSchema,
 		onSubmit
@@ -123,7 +123,6 @@ export default function CustomizedDialogs(props: CustomDialogProps) {
 									name='npwp'
 									label='NPWP'
 									variant='filled'
-									defaultValue={data?.npwp}
 									value={formik.values.npwp}
 									onChange={(e) => {
 										formik.handleChange(e);

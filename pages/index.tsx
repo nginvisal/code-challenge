@@ -50,6 +50,7 @@ const Home: NextPage = () => {
   };
 
   const handleSubmit = async (e: any) => {
+    console.log('......');
     if (editState.isEdit) {
       await updateSigner(
         e.id,
