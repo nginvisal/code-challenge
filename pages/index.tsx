@@ -16,7 +16,7 @@ import {
   TableRow,
   Typography,  
 } from '@mui/material';
-import CustomDialog from '../components/dialog/userDialog';
+import UserDialog from '../components/dialog/userDialog';
 import { createSigner, getSignerList, updateSigner } from '../services/signerProxy';
 
 const Home: NextPage = () => {
@@ -50,7 +50,6 @@ const Home: NextPage = () => {
   };
 
   const handleSubmit = async (e: any) => {
-    console.log('......');
     if (editState.isEdit) {
       await updateSigner(
         e.id,
@@ -83,7 +82,7 @@ const Home: NextPage = () => {
   return (
     <>
     <Container>
-        <CustomDialog
+        <UserDialog
           isOpen={editState.isOpen}
           onSubmit={handleSubmit}
           onClose={handleClose}

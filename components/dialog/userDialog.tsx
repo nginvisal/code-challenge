@@ -36,7 +36,7 @@ const renderOptions = (options: { label: string, value: string }[]) => {
 	});
 };
 
-export default function CustomizedDialogs(props: CustomDialogProps) {
+export default function UserDialog(props: CustomDialogProps) {
 	const { isOpen, onClose, onSubmit, isEdit, data } = props;
 
 	const validationSchema = yup.object({
