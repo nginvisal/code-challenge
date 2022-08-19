@@ -16,7 +16,6 @@ instance.interceptors.response.use(
 
 export const apiRequest = (options: AxiosRequestConfig) => {
   return instance({
-    baseURL: process.env.NEXT_PUBLIC_BASE_URL,
     headers: {
       'Content-Type': 'application/json',
     },

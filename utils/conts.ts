@@ -1,3 +1,3 @@
 export const ENDPOINT = {
-  SIGNER: '/signers',
+  SIGNER: '/api/signers',
 }

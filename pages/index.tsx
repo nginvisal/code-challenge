@@ -17,7 +17,7 @@ import {
   Typography,  
 } from '@mui/material';
 import UserDialog from '../components/dialog/userDialog';
-import { createSigner, getSignerList, updateSigner } from '../services/signerProxy';
+import { createSigner, getSignerList, updateSigner } from '../services/signerRequest';
 
 const Home: NextPage = () => {
   const [signerList, setSignerList] = useState([]);
@@ -75,7 +75,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     getSignerList().then((result) => {
-      setSignerList(result);
+      setSignerList(result.data);
     });
   }, []);
 
