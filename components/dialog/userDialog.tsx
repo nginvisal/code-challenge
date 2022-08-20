@@ -17,6 +17,7 @@ import * as yup from 'yup';
 export interface CustomDialogProps {
 	isOpen: boolean;
 	isEdit: boolean;
+	isLoading: boolean;
 	data: any;
 	onClose: () => void;
 	onSubmit: (e: any) => void;
@@ -37,7 +38,7 @@ const renderOptions = (options: { label: string, value: string }[]) => {
 };
 
 export default function UserDialog(props: CustomDialogProps) {
-	const { isOpen, onClose, onSubmit, isEdit, data } = props;
+	const { isOpen, onClose, onSubmit, isEdit, data, isLoading } = props;
 
 	const validationSchema = yup.object({
 		id: yup
@@ -90,7 +91,6 @@ export default function UserDialog(props: CustomDialogProps) {
 	const onSubmitClick = (e: any) => {
 		e.preventDefault();
 		formik.handleSubmit(e);
-		onClose();
 	};
 
 	return (
@@ -129,11 +129,11 @@ export default function UserDialog(props: CustomDialogProps) {
 										onChange={(e) => {
 											formik.handleChange(e);
 										}}
-										error={Boolean(formik.errors.npwp)}
-										helperText={formik.errors.npwp}
+										error={formik.touched.npwp && Boolean(formik.errors.npwp)}
+										helperText={formik.touched.npwp && formik.errors.npwp}
 										InputProps={{
 											style: {
-												color: formik.errors.npwp ? '#EC0C0C' : '#0E0E2C',
+												color: formik.touched.npwp && formik.errors.npwp ? '#EC0C0C' : '#0E0E2C',
 											},
 										}}
 									/>
@@ -154,6 +154,7 @@ export default function UserDialog(props: CustomDialogProps) {
 									<TextField
 										fullWidth
 										autoComplete='off'
+										onBlur={formik.handleBlur}
 										id='nama'
 										name='nama'
 										label='Nama Penandatangan SPT'
@@ -162,11 +163,11 @@ export default function UserDialog(props: CustomDialogProps) {
 										onChange={(e) => {
 											formik.handleChange(e);
 										}}
-										error={Boolean(formik.errors.nama)}
-										helperText={formik.errors.nama}
+										error={formik.touched.nama && Boolean(formik.errors.nama)}
+										helperText={formik.touched.nama && formik.errors.nama}
 										InputProps={{
 											style: {
-												color: formik.errors.nama ? '#EC0C0C' : '#0E0E2C',
+												color: formik.touched.nama && formik.errors.nama ? '#EC0C0C' : '#0E0E2C',
 											},
 										}}
 									/>
@@ -245,6 +246,7 @@ export default function UserDialog(props: CustomDialogProps) {
 						</Grid>
 					</DialogContent>
 					<DialogActions>
+						{/* disable on loading and add loading button */}
 						<Button onClick={onClose}>
 							BATAL
 						</Button>

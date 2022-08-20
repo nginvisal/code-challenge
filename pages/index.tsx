@@ -9,6 +9,7 @@ import {
   Container,
   Grid,
   Paper,
+  Snackbar,
   Table,
   TableBody,
   TableCell,
@@ -19,12 +20,18 @@ import {
 } from '@mui/material';
 import UserDialog from '../components/dialog/userDialog';
 import { createSigner, getSignerList, updateSigner } from '../services/signerRequest';
+import { SettingsSharp } from '@mui/icons-material';
 
 const Home: NextPage = () => {
   const dataRef = useRef({});
+  const [isDialogLoading, setDialogLoading] = useState(false);
   const [editState, setEditState] = useState({
     isEdit: false,
     isOpen: false
+  });
+  const [snackBarState, setSnackBarState] = useState({
+    isOpen: false,
+    message: '',
   });
 
   const singerListFetcher = async () => {
@@ -32,7 +39,7 @@ const Home: NextPage = () => {
     return result.data;
   }
 
-  const { data: signerList, error: signerListError } = useSWR('getsigner', singerListFetcher);
+  const { data: signerList, error: signerListError, mutate } = useSWR('getsigner', singerListFetcher);
 
   const handleOpen = () => {
     setEditState({
@@ -49,7 +56,7 @@ const Home: NextPage = () => {
     });
   };
 
-  const handleEdit = (data) => {
+  const handleEdit = (data: any) => {
     dataRef.current = data;
     setEditState({
       isOpen: true,
@@ -58,27 +65,55 @@ const Home: NextPage = () => {
   };
 
   const handleSubmit = async (e: any) => {
-    if (editState.isEdit) {
-      await updateSigner(
-        e.id,
-        {
+    try {
+      setDialogLoading(true);
+      if (editState.isEdit) {
+        const updateData = await updateSigner(
+          e.id,
+          {
+            npwp: e.npwp,
+            name: e.nama,
+            signatory: e.type,
+            statusTaxpayer: e.status,
+            defaultSignatory: e.signDefault,
+          }
+        );
+        const updateSignerList = signerList.map((item: any) => {
+          if (item.id == e.id) {
+            return updateData.data;
+          }
+          return item;
+        });
+        mutate(updateSignerList);
+      } else {
+        const signer = await createSigner({
           npwp: e.npwp,
           name: e.nama,
           signatory: e.type,
           statusTaxpayer: e.status,
           defaultSignatory: e.signDefault,
-        }
-      );
-    } else {
-      await createSigner({
-        npwp: e.npwp,
-        name: e.nama,
-        signatory: e.type,
-        statusTaxpayer: e.status,
-        defaultSignatory: e.signDefault,
+        });
+        mutate([...signerList, signer.data])
+      }
+      setSnackBarState({
+        isOpen: true,
+        message: editState.isEdit ?
+          'Edit successfully' :
+          'Create successfully'
       });
+    } catch (error) {
+      setSnackBarState({
+        isOpen: true,
+        message: 'Something went wrong'
+      });
+    } finally {
+      setDialogLoading(false);
+      setEditState({
+        isEdit: false,
+        isOpen: false,
+      });
+      dataRef.current = {};
     }
-    location.reload();
   }
 
   if (signerListError) {
@@ -102,6 +137,17 @@ const Home: NextPage = () => {
           onClose={handleClose}
           isEdit={editState.isEdit}
           data={dataRef.current}
+          isLoading={isDialogLoading}
+        />
+        <Snackbar
+          open={snackBarState.isOpen}
+          autoHideDuration={3000}
+          message={snackBarState.message}
+          onClose={() => {
+            setSnackBarState({
+              isOpen: false
+            })
+          }}
         />
         <Typography variant="h4" component="h4">
           Penandatangan SPT
@@ -141,7 +187,7 @@ const Home: NextPage = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {signerList.map((row, index) => (
+                  {signerList.map((row: any, index: number) => (
                     <TableRow
                       key={index.toString()}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
