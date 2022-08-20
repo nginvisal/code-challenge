@@ -60,9 +60,9 @@ export default function UserDialog(props: CustomDialogProps) {
 
 	const formik = useFormik({
 		initialValues: {
-			id: '' ,
-			npwp: '' ,
-			nama: '' ,
+			id: '',
+			npwp: '',
+			nama: '',
 			type: '',
 			status: '',
 			signDefault: false,
@@ -70,26 +70,28 @@ export default function UserDialog(props: CustomDialogProps) {
 		validationSchema: validationSchema,
 		onSubmit
 	});
-	
-	useEffect(()=> {
+
+	useEffect(() => {
 		if (isEdit) {
 			formik.setValues({
-				id:  data.id ,
-				npwp:   data.npwp ,
-				nama:  data.name ,
-				type:  data.signatory ,
-				status:  data.statusTaxpayer ,
-				signDefault:  data.defaultSignatory,
+				id: data.id,
+				npwp: data.npwp,
+				nama: data.name,
+				type: data.signatory,
+				status: data.statusTaxpayer,
+				signDefault: data.defaultSignatory,
 			});
+		} else {
+			formik.resetForm();
 		}
 	}, [data]);
-		
+
 
 	const onSubmitClick = (e: any) => {
-    e.preventDefault();
-    formik.handleSubmit(e);
+		e.preventDefault();
+		formik.handleSubmit(e);
 		onClose();
-  };
+	};
 
 	return (
 		<div>
@@ -98,161 +100,161 @@ export default function UserDialog(props: CustomDialogProps) {
 				open={isOpen}
 				fullWidth
 			>
-			<form onSubmit={onSubmitClick}>
-				<DialogTitle id='customized-dialog-title'>
-					Tambah Penandatangan SPT
-				</DialogTitle>
-				<DialogContent dividers>
-					<Grid container spacing={2} p={5}>
-						<Grid container spacing={2}
-							sx={{
-								alignItems: 'center'
-							}}
-						>
-							<Grid xs={5} item>
-								<Typography gutterBottom>
-									NPWP *
-								</Typography>
+				<form onSubmit={onSubmitClick}>
+					<DialogTitle id='customized-dialog-title'>
+						Tambah Penandatangan SPT
+					</DialogTitle>
+					<DialogContent dividers>
+						<Grid container spacing={2} p={5}>
+							<Grid container spacing={2}
+								sx={{
+									alignItems: 'center'
+								}}
+							>
+								<Grid xs={5} item>
+									<Typography gutterBottom>
+										NPWP *
+									</Typography>
+								</Grid>
+								<Grid xs={7} pb={2} item>
+									<TextField
+										fullWidth
+										onBlur={formik.handleBlur}
+										autoComplete='off'
+										id='npwp'
+										name='npwp'
+										label='NPWP'
+										variant='filled'
+										value={formik.values.npwp}
+										onChange={(e) => {
+											formik.handleChange(e);
+										}}
+										error={Boolean(formik.errors.npwp)}
+										helperText={formik.errors.npwp}
+										InputProps={{
+											style: {
+												color: formik.errors.npwp ? '#EC0C0C' : '#0E0E2C',
+											},
+										}}
+									/>
+								</Grid>
 							</Grid>
-							<Grid xs={7} pb={2} item>
-								<TextField
-									fullWidth
-									onBlur={formik.handleBlur}
-									autoComplete='off'
-									id='npwp'
-									name='npwp'
-									label='NPWP'
-									variant='filled'
-									value={formik.values.npwp}
-									onChange={(e) => {
-										formik.handleChange(e);
-									}}
-									error={Boolean(formik.errors.npwp)}
-									helperText={formik.errors.npwp}
-									InputProps={{
-										style: {
-											color: formik.errors.npwp ? '#EC0C0C' : '#0E0E2C',
-										},
-									}}
-								/>
+							<Grid container spacing={2}
+								sx={{
+									alignItems: 'center'
+								}}
+								pt={2}
+							>
+								<Grid xs={5} item>
+									<Typography gutterBottom>
+										Nama Penandatangan SPT *
+									</Typography>
+								</Grid>
+								<Grid xs={7} pb={2} item>
+									<TextField
+										fullWidth
+										autoComplete='off'
+										id='nama'
+										name='nama'
+										label='Nama Penandatangan SPT'
+										variant='filled'
+										value={formik.values.nama}
+										onChange={(e) => {
+											formik.handleChange(e);
+										}}
+										error={Boolean(formik.errors.nama)}
+										helperText={formik.errors.nama}
+										InputProps={{
+											style: {
+												color: formik.errors.nama ? '#EC0C0C' : '#0E0E2C',
+											},
+										}}
+									/>
+								</Grid>
 							</Grid>
-						</Grid>
-						<Grid container spacing={2}
-							sx={{
-								alignItems: 'center'
-							}}
-							pt={2}
-						>
-							<Grid xs={5} item>
-								<Typography gutterBottom>
-									Nama Penandatangan SPT *
-								</Typography>
-							</Grid>
-							<Grid xs={7} pb={2} item>
-								<TextField
-									fullWidth
-									autoComplete='off'
-									id='nama'
-									name='nama'
-									label='Nama Penandatangan SPT'
-									variant='filled'
-									value={formik.values.nama}
-									onChange={(e) => {
-										formik.handleChange(e);
-									}}
-									error={Boolean(formik.errors.nama)}
-									helperText={formik.errors.nama}
-									InputProps={{
-										style: {
-											color: formik.errors.nama ? '#EC0C0C' : '#0E0E2C',
-										},
-									}}
-								/>
-							</Grid>
-						</Grid>
-						<Grid container spacing={2}
-							sx={{
-								alignItems: 'center'
-							}}
-							pt={2}
-						>
-							<Grid xs={5} item>
-								<Typography gutterBottom>
-									Bertindak sebagai *
-								</Typography>
-							</Grid>
-							<Grid xs={7} pb={2} item>
-								<RadioGroup
-									aria-labelledby='demo-controlled-radio-buttons-group'
-									name='type'
-									row
-									value={formik.values.type}
-									onChange={formik.handleChange}
-								>
-									<Grid container>{renderOptions(
-										[
-											{ label: 'Wajib Pajak', value: 'TAXPAYER' },
-											{ label: 'Kuasa', value: 'AUTHORIZED_REPRESENTATIVE' }
-										]
-									)}</Grid>
-								</RadioGroup>
-							</Grid>
-						</Grid>
-						<Grid container spacing={2}
-							sx={{
-								alignItems: 'center'
-							}}
-							pt={2}
-						>
-							<Grid xs={5} item>
-								<Typography gutterBottom>
-									Status Wajib Pajak *
-								</Typography>
-							</Grid>
-							<Grid xs={7} pb={2} item>
-								<RadioGroup
-									aria-labelledby='demo-controlled-radio-buttons-group'
-									name='status'
-									row
-									value={formik.values.status}
-									onChange={formik.handleChange}
-								>
-									<Grid container>{renderOptions(
-										[
-											{ label: 'Aktif', value: 'ACTIVE' },
-											{ label: 'Tidak Aktif', value: 'NOT_ACTIVE' }
-										]
+							<Grid container spacing={2}
+								sx={{
+									alignItems: 'center'
+								}}
+								pt={2}
+							>
+								<Grid xs={5} item>
+									<Typography gutterBottom>
+										Bertindak sebagai *
+									</Typography>
+								</Grid>
+								<Grid xs={7} pb={2} item>
+									<RadioGroup
+										aria-labelledby='demo-controlled-radio-buttons-group'
+										name='type'
+										row
+										value={formik.values.type}
+										onChange={formik.handleChange}
+									>
+										<Grid container>{renderOptions(
+											[
+												{ label: 'Wajib Pajak', value: 'TAXPAYER' },
+												{ label: 'Kuasa', value: 'AUTHORIZED_REPRESENTATIVE' }
+											]
 										)}</Grid>
-								</RadioGroup>
+									</RadioGroup>
+								</Grid>
+							</Grid>
+							<Grid container spacing={2}
+								sx={{
+									alignItems: 'center'
+								}}
+								pt={2}
+							>
+								<Grid xs={5} item>
+									<Typography gutterBottom>
+										Status Wajib Pajak *
+									</Typography>
+								</Grid>
+								<Grid xs={7} pb={2} item>
+									<RadioGroup
+										aria-labelledby='demo-controlled-radio-buttons-group'
+										name='status'
+										row
+										value={formik.values.status}
+										onChange={formik.handleChange}
+									>
+										<Grid container>{renderOptions(
+											[
+												{ label: 'Aktif', value: 'ACTIVE' },
+												{ label: 'Tidak Aktif', value: 'NOT_ACTIVE' }
+											]
+										)}</Grid>
+									</RadioGroup>
+								</Grid>
+							</Grid>
+							<Grid container spacing={2}
+								sx={{
+									alignItems: 'center'
+								}}
+								pt={2}
+								item
+							>
+								<FormControlLabel
+									name='signDefault'
+									onChange={formik.handleChange}
+									control={<Checkbox checked={formik.values.signDefault} />}
+									label='Jadikan sebagai default'
+								/>
 							</Grid>
 						</Grid>
-						<Grid container spacing={2}
-							sx={{
-								alignItems: 'center'
-							}}
-							pt={2}
-							item
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={onClose}>
+							BATAL
+						</Button>
+						<Button
+							type='submit'
 						>
-							<FormControlLabel
-								name='signDefault'
-								onChange={formik.handleChange}
-								control={<Checkbox checked={formik.values.signDefault}/>}
-								label='Jadikan sebagai default'
-								/>
-						</Grid>
-					</Grid>
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={onClose}>
-						BATAL
-					</Button>
-					<Button
-						type='submit'
-					>
-						SIMPAN
-					</Button>
-				</DialogActions>
-			</form>
+							SIMPAN
+						</Button>
+					</DialogActions>
+				</form>
 			</Dialog>
 		</div>
 	);

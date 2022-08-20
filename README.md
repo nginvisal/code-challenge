@@ -19,6 +19,22 @@ You can start editing the page by modifying `pages/index.tsx`. The page auto-upd
 
 The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
+## Run Test
+```shell
+$ npm run test
+```
+* To update snapshot
+```shell
+$ npm run update:snapshot
+```
+
+## Commit
+```shell
+$ git add .
+$ npm run cm
+$ git push
+```
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
@@ -28,15 +44,7 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## Commit
-```shell
-$ git add .
-$ npm run cm
-$ git push
-```
-
 ## Future Work
 - Customize component for showing mask input
 - Add loading component
-- Group components and be more reusable
 - Some fields are not yet declared in typescript
